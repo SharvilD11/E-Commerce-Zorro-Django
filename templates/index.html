@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel="shortcut icon" href="/static/Img/favicon-32x32.png" type="image/x-icon">
+  <title>Zorro</title>
+  <style>
+    body {
+      background-color: beige;
+    }
+
+    footer {
+      background-color: burlywood;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Zorro</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/deals">Deals</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              Category
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="/electronics">Electronics</a></li>
+              <li><a class="dropdown-item" href="/fashion">Fashion</a></li>
+            </ul>
+          </li>
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Cart(<span id="cart">0</span>)</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/checkout">Checkout</a>
+          </li>
+          {% else %}
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/tracker">Tracker</a>
+          </li>
+
+        </ul>
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+
+        </form>
+
+
+        <div class="mx-2">
+          {% if user.is_authenticated %}
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Welcome {{request.user}}
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/logout">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+
+
+          {% else %}
+
+          <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+            data-bs-target="#SignInModal">SignIn
+          </button>
+          <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+            data-bs-target="#SignUpModal">SignUp
+          </button>
+
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+
+
+  <!-- SignIn Modal -->
+  <div class="modal fade" id="SignInModal" tabindex="-1" aria-labelledby="SignInModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="SignUpModalLabel">Sign In</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="/signin">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="exampleInputText1" class="form-label">Name</label>
+              <input type="text" class="form-control" id="loginusername" name="loginusername"
+                aria-describedby="TextHelp">
+              <div id="TextHelp" class="form-text"></div>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Password</label>
+              <input type="password" class="form-control" id="loginpass" name="loginpass">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SignUp Modal   -->
+  <div class="modal fade" id="SignUpModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="SignUpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="SignUpModalLabel">Sign Up</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="/signup">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="exampleInputText1" class="form-label">Name</label>
+              <input type="text" class="form-control" id="name" name="name" aria-describedby="TextHelp">
+              <div id="TextHelp" class="form-text"></div>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">E-mail Address</label>
+              <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+              <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Password</label>
+              <input type="password" class="form-control" id="pass1" name="pass1">
+            </div>
+            <div class="mb-3">
+              <label for="CexampleInputPassword1" class="form-label">Confirm Password</label>
+              <input type="password" class="form-control" id="pass2" name="pass2">
+            </div>
+            <button type="submit" class="btn btn-primary">Create Account</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+        aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+        aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+        aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <a href="#">
+          <img src="/static/Img/Amazon1.jpg" height="300" class="d-block w-100" alt="...">
+        </a>
+        <div class="carousel-caption d-none d-md-block">
+
+        </div>
+      </div>
+      <div class="carousel-item">
+        <a href="#">
+          <img src="/static/Img/Carousel_2.jpg" height="300" class="d-block w-100" alt="...">
+        </a>
+        <div class="carousel-caption d-none d-md-block">
+
+        </div>
+      </div>
+      <div class="carousel-item">
+        <a href="#">
+          <img src="/static/Img/Carousel_1.jpg" height="300" class="d-block w-100" alt="...">
+        </a>
+        <div class="carousel-caption d-none d-md-block">
+
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <div id="banner" style="overflow: hidden; display: flex; justify-content:space-around;">
+    <div class="my-4 img-fluid" style="max-width: 100%; max-height: auto;">
+      <a href="/iPhone13"><img src="/static/Img/ipohne13.jfif"></a>
+      <figcaption class="figure-caption my-4 text-lg-center">iPhone 13</figcaption>
+    </div>
+
+    <div class="my-4 img-fluid" style="max-width: 100%; max-height: auto;">
+      <a href="/sonybravia"><img src="/static/Img/sonybravia1.jfif" width="300" height="300"></a>
+      <figcaption class="figure-caption my-4 text-lg-center">Sony Bravia</figcaption>
+    </div>
+
+    <div class="my-4 img-fluid" style="max-width: 100%; max-height: auto;">
+      <a href="/applepro"><img src="/static/Img/ApplePro.png" width="300" height="300"></a>
+      <figcaption class="figure-caption my-4 text-lg-center">Apple Pro Display XDR</figcaption>
+    </div>
+  </div>
+
+  <div id="banner1" style="overflow: hidden; display: flex; justify-content:space-around;">
+    <b> Supported Payment Methods:</b>
+    <div class="my-4 img-fluid" style="max-width: 100%; max-height: auto;">
+      <img src="/static/Img/creditcard.jfif" width="200" height="200">
+
+    </div>
+
+    <div class="my-4 img-fluid" style="max-width: 100%; max-height: auto;">
+      <img src="/static/Img/debitcard.jfif" width="200" height="200">
+
+    </div>
+
+    <div class="my-4 img-fluid" style="max-width: 100%; max-height: auto;">
+      <img src="/static/Img/upi.jfif" width="200" height="200">
+
+    </div>
+
+    <div class="my-4 img-fluid" style="max-width: 100%; max-height: auto;">
+      <img src="/static/Img/COD.jfif" width="200" height="200">
+
+    </div>
+  </div>
+
+  <!-- Optional JavaScript; choose one of the two! -->
+
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+
+  <!-- Option 2: Separate Popper and Bootstrap JS -->
+  <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
+
+
+  {% for i in x%}
+  <button id="x" class="btn btn-primary cart">Add To Cart</button>
+  {% endfor %}
+
+
+
+  {% block js %}
+  <script>
+    console.log('working');
+    if (localStorage.getItem('cart') == null) {
+      var cart = {};
+    }
+    else {
+      cart = JSON.parse(localStorage.getItem('cart'));
+      document.getElementById('cart').innerHTML = Object.keys(cart).length;
+    }
+    $('.cart').click(function () {
+      console.log('clicked');
+      var idstr = this.id.toString();
+      console.log(idstr);
+      if (cart[idstr] != undefined) {
+        cart[idstr] = cart[idstr] + 1;
+      }
+      else {
+        cart[idstr] = 1;
+      }
+      console.log(cart);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      document.getElementById('cart').innerHTML = Object.keys(cart).length;
+
+    });
+
+    function updateCart(cart) {
+      for (var item in cart) {
+        var Item = item.toString();
+
+        document.getElementById('#' + Item).innerHTML = "<button id='minus" + Item + "' class='btn btn-primary minus'>-</button> <span id='val" + Item + "''>" + cart[Item] + "</span> <button id='plus" + Item + "' class='btn btn-primary plus'> + </button>";
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      document.getElementById('cart').innerHTML = Object.keys(cart).length;
+      console.log(cart);
+    }
+
+
+    $('.AB').on("click", "button.minus", function () {
+      a = this.id.slice(5,);
+      console.log(a)
+      cart[a] = cart[a] - 1;
+      cart[a] = Math.max(0, cart[a]);
+      //document.getElementById(a).innerHTML = cart[a];
+      updateCart(cart);
+    });
+    $('.AB').on("click", "button.plus", function () {
+      a = this.id.slice(4,);
+      console.log("plus")
+      cart[a] = cart[a] + 1;
+      //document.getElementById(a).innerHTML = cart[a];
+      updateCart(cart);
+    });
+
+
+  </script>
+  {% endblock %}
+
+
+
+
+
+
+</body>
+
+<footer class="container">
+  <p class="float-right"><a href="#">Back to top</a></p>
+  <p>© 2022-2023 Zorro, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+</footer>
+
+</html>
