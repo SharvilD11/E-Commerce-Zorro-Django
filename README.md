@@ -8,21 +8,20 @@ Coming to the description of all the files that I have created in this project.
 Zorro : It is the project created initially and is also the name of my E-Commerce Website app : It is the app created inside this project(python apps) static : This folder contains all the images that I have used in my Website templates : This contains all the html files that I coded. I used some amount of javascript too but didn't separate the javascript files so sorry for that.
 
 # individual template files:
-appplepro.html : contains product information
-base.html : base file of my project which contains code needed on every web page of my website.
-checkout.html : checkout page
-children.html : contains products
-deals.html : contains products having offers on them
-electronics.html : contains electronic products like mobiles,laptops
-email.html :
-fashion.html : contains clothe=ing products
-iPhone13.html : contains product infromation
-image.html : contains some trial codes that I have written
-index.html : index page of my website. I have added signin,signup,tracker functionalities and many more in the project.
-men.html : contains products
-sonybravia.html : contains product infromation
-tracker.html : Tracker which can give updates about order whenever someone enters their order id and email
-women.html : contains products
+1. appplepro.html : contains product information
+2. base.html : base file of my project which contains code needed on every web page of my website.
+3. checkout.html : checkout page
+4. children.html : contains products
+5. deals.html : contains products having offers on them
+6. electronics.html : contains electronic products like mobiles,laptops
+7. email.html :
+8. fashion.html : contains clothe=ing products
+9. iPhone13.html : contains product infromation
+10. index.html : index page of my website. I have added signin,signup,tracker functionalities and many more in the project.
+11. men.html : contains products
+12. sonybravia.html : contains product infromation
+13. tracker.html : Tracker which can give updates about order whenever someone enters their order id and email
+14. women.html : contains products
 # I have added products, orders and order-updates in the django admin interface which you can see by logging in
 # username - admin
 # password - admin
